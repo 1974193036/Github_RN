@@ -9,6 +9,7 @@
     "postinstall": "rndebugger-open"
   },
   "dependencies": {
+    "GitHubTrending": "^3.0.1",
     "react": "16.8.3",
     "react-native": "0.59.2",
     "react-native-gesture-handler": "^1.1.0",

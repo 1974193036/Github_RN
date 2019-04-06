@@ -27,6 +27,27 @@ class PopularContent extends Component {
               'DetailPage', {}
             )
           }}/>
+        <Button
+          title="跳转到FetchDemoPage页面"
+          onPress={() => {
+            NavigationUtil.goPage(
+              'FetchDemoPage', {}
+            )
+          }}/>
+        <Button
+          title="跳转到AsyncStorageDemoPage页面"
+          onPress={() => {
+            NavigationUtil.goPage(
+              'AsyncStorageDemoPage', {}
+            )
+          }}/>
+        <Button
+          title="跳转到DataStoreDemoPage页面(离线缓存框架)"
+          onPress={() => {
+            NavigationUtil.goPage(
+              'DataStoreDemoPage', {}
+            )
+          }}/>
       </View>
     )
   }
