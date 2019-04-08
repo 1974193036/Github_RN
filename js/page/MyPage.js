@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {Button, StyleSheet, Text, View} from 'react-native';
+import NavigationUtil from '../navigator/NavigationUtil';
 
 
 export default class MyPage extends Component {
@@ -7,6 +8,36 @@ export default class MyPage extends Component {
     return (
       <View style={styles.container}>
         <Text style={styles.MyPage}>MyPage</Text>
+        <Text style={styles.MyPage}>MyPage1</Text>
+        <Text style={styles.MyPage}>MyPage2</Text>
+        <Button
+          title="跳转到详情页"
+          onPress={() => {
+            NavigationUtil.goPage(
+              'DetailPage', {}
+            )
+          }}/>
+        <Button
+          title="跳转到FetchDemoPage页面"
+          onPress={() => {
+            NavigationUtil.goPage(
+              'FetchDemoPage', {}
+            )
+          }}/>
+        <Button
+          title="跳转到AsyncStorageDemoPage页面"
+          onPress={() => {
+            NavigationUtil.goPage(
+              'AsyncStorageDemoPage', {}
+            )
+          }}/>
+        <Button
+          title="跳转到DataStoreDemoPage页面(离线缓存框架)"
+          onPress={() => {
+            NavigationUtil.goPage(
+              'DataStoreDemoPage', {}
+            )
+          }}/>
       </View>
     )
   }
