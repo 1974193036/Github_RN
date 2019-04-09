@@ -48,6 +48,7 @@ class PopularContent extends Component {
   _store() {
     const { popular } = this.props
     let store = popular[this.storeName]
+    // 避免一些tab项对应的数据未加载完成而报错
     if (!store) {
       store = {
         items: [],

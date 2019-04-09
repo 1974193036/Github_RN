@@ -35,7 +35,7 @@ function handleData(dispatch, storeName, data, pageSize) {
   }
   dispatch({
     type: Types.POPULAR_REFRESH_SUCCESS,
-    items: fixItems,
+    items: fixItems, // 原始数据
     projectModels: pageSize > fixItems.length ? fixItems : fixItems.slice(0, pageSize), // 第一次要展示的数据
     storeName,
     pageIndex: 1
