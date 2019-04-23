@@ -1,10 +1,17 @@
 import React, {Component} from 'react';
-import {ActivityIndicator, Button, FlatList, RefreshControl, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {ActivityIndicator, Button, DeviceInfo, FlatList, RefreshControl, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {createAppContainer, createMaterialTopTabNavigator} from 'react-navigation';
+import NavigationUtil from '../navigator/NavigationUtil';
 import Toast from 'react-native-easy-toast';
 import {connect} from 'react-redux';
 import actions from '../action/index';
 import PopularItem from '../common/PopularItem';
+import NavigationBar from '../common/NavigationBar';
+import {FLAG_STORAGE} from '../expand/dao/DataStore';
+import FavoriteDao from '../expand/dao/FavoriteDao';
+import FavoriteUtil from '../util/FavoriteUtil';
+import EventTypes from '../util/EventTypes';
+import EventBus from 'react-native-event-bus';
 
 // export default class PopularPage extends Component {
 //   render() {
@@ -18,30 +25,53 @@ import PopularItem from '../common/PopularItem';
 const URL = 'https://api.github.com/search/repositories?q=';
 const QUERY_STR = '&sort=stars';
 const PAGE_SIZE = 10; // 设为常数, 防止修改
+const THEME_COLOR = '#678';
+const favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_popular);
 
 class PopularContent extends Component {
   constructor(props) {
     super(props)
     const {tabLabel} = this.props
     this.storeName = tabLabel
+    this.isFavoriteChanged = false
   }
 
   componentDidMount() {
     this.loadData()
+    /**
+     * 监听收藏页面列表项点击收藏按钮事件
+     * 监听底部导航栏切换的事件，从其他页面切换到当前页面，to=0，索引值
+     * */
+    EventBus.getInstance().addListener(EventTypes.favorite_changed_popular, this.favoriteChangeListener = () => {
+      this.isFavoriteChanged = true
+    })
+
+    EventBus.getInstance().addListener(EventTypes.bottom_tab_select, this.bottomTabSelectListener = data => {
+      if (data.to === 0 && this.isFavoriteChanged) {
+        this.loadData(null, true)
+      }
+    })
   }
 
-  loadData(loadMore) {
-    const {onRefreshPopular, onLoadMorePopular} = this.props
+  componentWillUnmount() {
+    EventBus.getInstance().removeListener(this.favoriteChangeListener)
+    EventBus.getInstance().removeListener(this.bottomTabSelectListener)
+  }
+
+  loadData(loadMore, refreshFavorite) {
+    const {onRefreshPopular, onLoadMorePopular, onFlushPopularFavorite} = this.props
     const url = this.genFetchUrl(this.storeName)
     const store = this._store()
     if (loadMore) {
       // 上拉加载更多
-      onLoadMorePopular(this.storeName, ++store.pageIndex, PAGE_SIZE, store.items, () => {
+      onLoadMorePopular(this.storeName, ++store.pageIndex, PAGE_SIZE, store.items, favoriteDao, () => {
         this.refs.toast.show('没有更多了')
       })
+    } else if (refreshFavorite) {
+      onFlushPopularFavorite(this.storeName, store.pageIndex, PAGE_SIZE, store.items, favoriteDao)
     } else {
       // 下拉刷新
-      onRefreshPopular(this.storeName, url, PAGE_SIZE)
+      onRefreshPopular(this.storeName, url, PAGE_SIZE, favoriteDao)
     }
   }
 
@@ -66,12 +96,34 @@ class PopularContent extends Component {
 
   renderItem(data) {
     const item = data.item
+    // item = {
+    //   item: [{...}, {...}, {...}],
+    //   isFavorite: false
+    // }
+
     // return (
     //   <View style={{marginBottom: 10}}>
     //     <Text style={{backgroundColor: '#faa'}}>{item.name}</Text>
     //   </View>
     // )
-    return <PopularItem item={item} onSelect={() => {}}/>
+
+    /**
+     * callback被两个地方使用
+     * 1.在PopularItem（BaseItem）内，callback作为一个函数指针，但不执行
+     * 2.等到跳转进入详情页面后，callback被当作参数传入详情页面，详情页的收藏按钮点击后，执行callback()，即执行了 PopularItem（BaseItem）内 的那个函数指针，
+     *   使得改变详情页面的收藏状态，返回到列表页面也产生了变化
+     * */
+    return (<PopularItem
+      projectModel={item}
+      onSelect={(callback) => {
+        NavigationUtil.goPage('DetailPage', {
+          projectModel: item,
+          flag: FLAG_STORAGE.flag_popular,
+          callback
+        })
+      }}
+      onFavorite={(item, isFavorite) => FavoriteUtil.onFavorite(favoriteDao, item, isFavorite, FLAG_STORAGE.flag_popular)}
+    />)
   }
 
   // 上拉加载loading效果
@@ -92,7 +144,7 @@ class PopularContent extends Component {
         <FlatList
           data={store.projectModels}
           renderItem={data => this.renderItem(data)}
-          keyExtractor={(item, index) => '' + item.id}
+          keyExtractor={(item, index) => '' + item.item.id}
           refreshControl={
             <RefreshControl
               title={'加载中...'}
@@ -131,8 +183,9 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  onRefreshPopular: (storeName, url, pageSize) => dispatch(actions.onRefreshPopular(storeName, url, pageSize)),
-  onLoadMorePopular: (storeName, pageIndex, pageSize, items, callback) => dispatch(actions.onLoadMorePopular(storeName, pageIndex, pageSize, items, callback)),
+  onRefreshPopular: (storeName, url, pageSize, favoriteDao) => dispatch(actions.onRefreshPopular(storeName, url, pageSize, favoriteDao)),
+  onLoadMorePopular: (storeName, pageIndex, pageSize, items, favoriteDao, callback) => dispatch(actions.onLoadMorePopular(storeName, pageIndex, pageSize, items, favoriteDao, callback)),
+  onFlushPopularFavorite: (storeName, pageIndex, pageSize, items, favoriteDao) => {dispatch(actions.onFlushPopularFavorite(storeName, pageIndex, pageSize, items, favoriteDao))}
 })
 
 const PopularTabContent = connect(mapStateToProps, mapDispatchToProps)(PopularContent)
@@ -192,7 +245,8 @@ class PopularPage extends Component {
         upperCaseLabel: false, // 是否使标签大写，默认true
         scrollEnabled: true, // 选项卡滚动，默认false
         style: {
-          backgroundColor: '#678' // TabBar的背景色
+          backgroundColor: '#678', // TabBar的背景色
+          height: 30, // 解决开启 scrollEnabled 后在android上初次加载时闪烁问题
         },
         indicatorStyle: styles.indicatorStyle, // 标签指示器颜色，切换滑动的那条线
         labelStyle: styles.labelStyle, // 文字的样式
@@ -201,10 +255,32 @@ class PopularPage extends Component {
     return createAppContainer(topTab)
   }
 
+  // 自定义状态栏，导航栏
+  _customNavigationBar() {
+    let statusBar = {
+      backgroundColor: THEME_COLOR,
+      barStyle: 'light-content'
+    }
+    let navgiationBar = <NavigationBar
+      title={'最热'}
+      statusBar={statusBar}
+      style={{ backgroundColor: THEME_COLOR }}
+    />
+    return navgiationBar
+  }
+
   render() {
     const Top = this._tabNavigator()
+    const customNavigationBar = this._customNavigationBar()
     return (
-      <View style={{flex: 1, marginTop: 30}}>
+      <View style={{flex: 1, marginTop: DeviceInfo.isIPhoneX_deprecated ? 0 : 0 }}>
+        {/*<View style={{backgroundColor: 'gold', height: 32}}>*/}
+          {/*<StatusBar barStyle = 'light-content' hidden="false"></StatusBar>*/}
+        {/*</View>*/}
+        {/*<View style={{backgroundColor: 'yellow', height: 40, justifyContent:'center',alignItems:'center'}}>*/}
+          {/*<Text>最热</Text>*/}
+        {/*</View>*/}
+        {customNavigationBar}
         <Top></Top>
       </View>
     )
@@ -222,8 +298,9 @@ const styles = StyleSheet.create({
     fontSize: 20
   },
   tabStyle: {
-    minWidth: 50,
-    height: 40
+    // minWidth: 50,
+    // height: 40
+    padding: 0
   },
   indicatorStyle: {
     height: 2,
@@ -231,8 +308,9 @@ const styles = StyleSheet.create({
   },
   labelStyle: {
     fontSize: 13,
-    marginTop: 6,
-    marginBottom: 6
+    margin: 0,
+    // marginTop: 6,
+    // marginBottom: 6
   },
   indicatorContainer: {
     alignItems: 'center'

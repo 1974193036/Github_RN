@@ -1,19 +1,19 @@
 /**
- * 最热 页面的列表单项
+ * 趋势 页面的列表单项
  *
  * */
 
 import React, {Component} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import HTMLView from 'react-native-htmlview';
 import BaseItem from './BaseItem';
 
-export default class PopularItem extends BaseItem {
-
+export default class TrendingItem extends BaseItem {
   render() {
     const {projectModel} = this.props
-    const {item} = projectModel
-    if (!item || !item.owner) {
+    const { item } = projectModel
+    if (!item) {
       return null
     }
     // let favoriteButton = <TouchableOpacity
@@ -27,22 +27,37 @@ export default class PopularItem extends BaseItem {
     //     color={'red'}
     //   />
     // </TouchableOpacity>
+
+    /** HTMLView：解析html标签 */
+
     return (
       <TouchableOpacity onPress={() => this.onItemClick()}>
         <View style={styles.cell_container}>
-          <Text style={styles.title}>{item.full_name}</Text>
-          <Text style={styles.description}>{item.description}</Text>
+          <Text style={styles.title}>{item.fullName}</Text>
+          {/*<Text style={styles.description}>{item.description}</Text>*/}
+          <HTMLView
+            value={'<p>' + item.description + '</p>'}
+            onLinkPress={(url) => {}}
+            stylesheet={{
+              p: styles.description,
+              a: styles.description,
+            }}
+          />
+          <Text style={styles.description}>{item.meta}</Text>
           <View style={styles.row}>
-            <View style={styles.row_left}>
-              <Text>Author：</Text>
-              <Image
-                style={{width: 22, height: 22}}
-                source={{uri: item.owner.avatar_url}}
-              />
+            <View style={styles.row}>
+              <Text>Built by:</Text>
+              {item.contributors && item.contributors.map((result, i, arr) => {
+                return <Image
+                  key={i}
+                  style={{ height: 22, width: 22, margin: 2 }}
+                  source={{ uri: arr[i] }}
+                />
+              })}
             </View>
             <View style={styles.row_left}>
               <Text>Star：</Text>
-              <Text>{item.stargazers_count}</Text>
+              <Text>{item.starCount}</Text>
             </View>
             {this._favoriteIcon()}
           </View>

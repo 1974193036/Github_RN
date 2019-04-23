@@ -11,6 +11,7 @@ import DynamicTabNavigator from '../navigator/DynamicTabNavigator';
 import NavigationUtil from "../navigator/NavigationUtil"
 import { connect } from 'react-redux';
 import { NavigationActions } from "react-navigation";
+import BackPressComponent from "../common/BackPressComponent";
 /**
  * NavigationActions：处理安卓的物理返回键
  * BackHandler：处理安卓的物理返回键
@@ -93,22 +94,26 @@ class HomePage extends Component {
     super(props)
     console.disableYellowBox = true // 禁止黄色的警告语
 
-    // this.backPress = new BackPressComponent({backPress: this.onBackPress()});
+    /**
+     * 处理安卓的物理返回键
+     * */
+    this.backPress = new BackPressComponent({backPress: () => this.onBackPress()})
   }
 
   componentDidMount() {
-     BackHandler.addEventListener('hardwareBackPress', this.onBackPress)
-
-    // this.backPress.componentDidMount();
+     // BackHandler.addEventListener('hardwareBackPress', this.onBackPress)
+    this.backPress.componentDidMount()
   }
 
   componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress)
-
-    // this.backPress.componentWillUnmount();
+    // BackHandler.removeEventListener('hardwareBackPress', this.onBackPress)
+    this.backPress.componentWillUnmount()
   }
 
-  onBackPress = () => {
+  /**
+   * 处理安卓的物理返回键
+   * */
+  onBackPress() {
     const {dispatch, nav} = this.props
     // 根据 redux：
     // index === 0 为 home 页面
@@ -119,7 +124,7 @@ class HomePage extends Component {
     if (nav.routes[1].index === 0) {
       return false
     }
-    dispatch(NavigationActions.back());
+    dispatch(NavigationActions.back())
     return true
   }
 

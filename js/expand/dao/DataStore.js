@@ -70,7 +70,7 @@ export default class DataStore {
         new GitHubTrending().fetchTrending(url)
           .then(items => {
             if (!items) {
-              throw new Error('responseData is null');
+              throw new Error('responseData is null')
             }
             this.saveData(url, items)
             resolve(items)
@@ -84,6 +84,7 @@ export default class DataStore {
 
   /**
    * 最后
+   * 对外入口
    * */
   fetchData(url, flag) {
     return new Promise((resolve, reject) => {

@@ -14,6 +14,8 @@ import FavoritePage from '../page/FavoritePage';
 import MyPage from '../page/MyPage';
 // import NavigationUtil from "./navigator/NavigationUtil"
 import {connect} from 'react-redux';
+import EventTypes from '../util/EventTypes';
+import EventBus from 'react-native-event-bus';
 
 const TABS = {
   Popular: {
@@ -92,7 +94,21 @@ class DynamicTabNavigator extends Component {
     //  * */
     // NavigationUtil.navigation = this.props.navigation
     const Tab = this._tabNavigator()
-    return <Tab></Tab>
+    // return <Tab></Tab>
+    /**
+     * onNavigationStateChange：监听底部导航栏切换
+     * 发送事件，被其他页面监听
+     *  */
+    return (
+      <Tab
+        onNavigationStateChange={(prevState, newState, action) => {
+          EventBus.getInstance().fireEvent(EventTypes.bottom_tab_select, {
+            from: prevState.index,
+            to: newState.index
+          })
+        }}
+      />
+    )
   }
 }
 

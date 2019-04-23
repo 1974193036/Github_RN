@@ -44,7 +44,10 @@ const MainNavigator = createStackNavigator({
     }
   },
   DetailPage: {
-    screen: DetailPage
+    screen: DetailPage,
+    navigationOptions: {
+      header: null
+    }
   },
   FetchDemoPage: {
     screen: FetchDemoPage
