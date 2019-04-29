@@ -9,9 +9,12 @@ import {
 import WelcomePage from '../page/WelcomePage';
 import HomePage from '../page/HomePage';
 import DetailPage from '../page/DetailPage';
-import FetchDemoPage from '../page/FetchDemoPage';
-import AsyncStorageDemoPage from '../page/AsyncStorageDemoPage';
-import DataStoreDemoPage from '../page/DateStoreDemoPage';
+import WebViewPage from '../page/WebViewPage';
+import AboutPage from '../page/about/AboutPage';
+import AboutMePage from '../page/about/AboutMePage';
+// import FetchDemoPage from '../page/FetchDemoPage';
+// import AsyncStorageDemoPage from '../page/AsyncStorageDemoPage';
+// import DataStoreDemoPage from '../page/DateStoreDemoPage';
 
 import {connect} from 'react-redux';
 import {createReactNavigationReduxMiddleware, createReduxContainer} from 'react-navigation-redux-helpers';
@@ -49,15 +52,33 @@ const MainNavigator = createStackNavigator({
       header: null
     }
   },
-  FetchDemoPage: {
-    screen: FetchDemoPage
+  WebViewPage: {
+    screen: WebViewPage,
+    navigationOptions: {
+      header: null
+    }
   },
-  AsyncStorageDemoPage: {
-    screen: AsyncStorageDemoPage
+  AboutPage: {
+    screen: AboutPage,
+    navigationOptions: {
+      header: null,
+    }
   },
-  DataStoreDemoPage: {
-    screen: DataStoreDemoPage
-  }
+  AboutMePage: {
+    screen: AboutMePage,
+    navigationOptions: {
+      header: null,
+    }
+  },
+  // FetchDemoPage: {
+  //   screen: FetchDemoPage
+  // },
+  // AsyncStorageDemoPage: {
+  //   screen: AsyncStorageDemoPage
+  // },
+  // DataStoreDemoPage: {
+  //   screen: DataStoreDemoPage
+  // }
 })
 
 export const RootNavigator = createSwitchNavigator({

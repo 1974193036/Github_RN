@@ -1,38 +1,8 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet, View, Text } from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 export default class ViewUtil {
-  // static getMenuItem(callback, menu, color, expandableIcon) {
-  //   return ViewUtil.getSettingItem(callback, menu.name, color, menu.Icons, menu.icon, expandableIcon)
-  // }
-
-  // static getSettingItem(callback, text, color, Icons, icon, expandableIcon) {
-  //   return (
-  //     <TouchableOpacity
-  //       onPress={callback}
-  //       style={styles.setting_item_container}
-  //     >
-  //       <View style={{alignItems: 'center', flexDirection: 'row'}}>
-  //         {Icons && icon ?
-  //           <Icons
-  //             name={icon}
-  //             size={16}
-  //             style={{color: color, marginRight: 10}}
-  //           /> :
-  //           <View style={{opacity: 1, width: 16, height: 16, marginRight: 10}}/>
-  //         }
-  //         <Text>{text}</Text>
-  //       </View>
-  //       <Ionicons
-  //         name={expandableIcon ? expandableIcon : 'ios-arrow-forward'}
-  //         size={16}
-  //         style={{marginRight: 10, alignSelf: 'center', color: color || 'black'}}
-  //       />
-  //     </TouchableOpacity>
-  //   )
-  // }
-
   /**
    * 返回按钮
    * @param {回调方法} callback
@@ -65,6 +35,46 @@ export default class ViewUtil {
       />
     </TouchableOpacity>
   }
+
+
+  static getMenuItem(callback, menu, color, expandableIcon) {
+    return ViewUtil.getSettingItem(callback, menu.name, color, menu.Icons, menu.icon, expandableIcon)
+  }
+
+  /**
+   * 获取设置页的Item
+   * @param callback
+   * @text 显示的文本
+   * @color 图标颜色
+   * @Icons react-native-vector-icons/Ionicons组件
+   * @icon 左侧图标
+   * @expandableIcon 右侧图标
+   */
+  static getSettingItem(callback, text, color, Icons, icon, expandableIcon) {
+    return (
+      <TouchableOpacity
+        onPress={callback}
+        style={styles.setting_item_container}
+      >
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          {Icons && icon ?
+            <Icons
+              name={icon}
+              size={16}
+              style={{color: color, marginRight: 10}}
+            /> :
+            <View style={{opacity: 1, width: 16, height: 16, marginRight: 10}}/>
+          }
+          <Text>{text}</Text>
+        </View>
+        <Ionicons
+          name={expandableIcon ? expandableIcon : 'ios-arrow-forward'}
+          size={16}
+          style={{marginRight: 10, alignSelf: 'center', color: color || 'black'}}
+        />
+      </TouchableOpacity>
+    )
+  }
 }
 
 const styles = StyleSheet.create({
@@ -72,8 +82,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 10,
     height: 60,
-    alignItems: 'center',
+    flexDirection: 'row',
     justifyContent: 'space-between',
-    flexDirection: 'row'
+    alignItems: 'center'
   }
 })
