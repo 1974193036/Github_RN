@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Modal, ScrollView, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View} from 'react-native';
+import {Button, Linking, Modal, ScrollView, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View} from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import NavigationBar from '../common/NavigationBar';
@@ -7,10 +7,13 @@ import {MORE_MENU} from '../common/MORE_MENU';
 import GlobalStyles from '../res/style/GlobalStyles';
 import ViewUtil from '../util/ViewUtil';
 import NavigationUtil from '../navigator/NavigationUtil';
+import {FLAG_LANGUAGE} from '../expand/dao/LanguageDao';
+import {connect} from 'react-redux';
+import actions from '../action';
 
 const THEME_COLOR = '#678';
 
-export default class MyPage extends Component {
+class MyPage extends Component {
   getRightButton() {
     return (
       <View style={{flexDirection: 'row'}}>
@@ -44,6 +47,8 @@ export default class MyPage extends Component {
 
   onClick(menu) {
     let RouteName, params = {}
+    const {theme} = this.props
+    // params.theme = theme
     switch (menu) {
       case MORE_MENU.Tutorial:
         RouteName = 'WebViewPage'
@@ -56,26 +61,70 @@ export default class MyPage extends Component {
       case MORE_MENU.About_Author:
         RouteName = 'AboutMePage'
         params.title = '关于作者'
-        break;
+        break
+      case MORE_MENU.Custom_Key:
+      case MORE_MENU.Custom_Language:
+      case MORE_MENU.Remove_Key:
+        RouteName = 'CustomKeyPage'
+        params.flag = menu === MORE_MENU.Custom_Language ? FLAG_LANGUAGE.flag_dao_language : FLAG_LANGUAGE.flag_dao_key
+        params.isRemoveKey = menu === MORE_MENU.Remove_Key
+        // params.theme = {
+        //   themeColor: 'red'
+        // }
+        break
+      case MORE_MENU.Sort_Key:
+        RouteName = 'SortKeyPage'
+        params.flag = FLAG_LANGUAGE.flag_dao_key
+        // params.theme = {
+        //   themeColor: 'red'
+        // }
+        break
+      case MORE_MENU.Sort_Language:
+        RouteName = 'SortKeyPage'
+        params.flag = FLAG_LANGUAGE.flag_dao_language
+        // params.theme = {
+        //   themeColor: 'red'
+        // }
+        break
+      case MORE_MENU.Custom_Theme: // 自定义主题
+        const {onShowCustomThemeView} = this.props
+        onShowCustomThemeView(true)
+        break
+      case MORE_MENU.Feedback: // 反馈
+        const url = 'app-settings:'
+        Linking.canOpenURL(url)
+          .then(support => {
+            if (!support) {
+              console.log('can\'t handle url:' + url);
+            } else {
+              Linking.openURL(url)
+            }
+          })
+          .catch(e => {
+            console.error('an error occor');
+          })
+        break
       default:
         break
     }
     if (RouteName) {
-      NavigationUtil.goPage(RouteName, params)
+      NavigationUtil.goPage(RouteName, {...params, theme: theme})
     }
   }
 
   getItem(menu) {
+    const {theme} = this.props
     return ViewUtil.getMenuItem(
       () => this.onClick(menu),
       menu,
-      THEME_COLOR
+      theme.themeColor
     )
   }
 
   render() {
+    const {theme} = this.props
     let statusBar = {
-      backgroundColor: THEME_COLOR,
+      backgroundColor: theme.themeColor,
       barStyle: 'light-content'
     }
     let navgiationBar = <NavigationBar
@@ -83,7 +132,7 @@ export default class MyPage extends Component {
       statusBar={statusBar}
       leftButton={this.getLeftButton()}
       rightButton={this.getRightButton()}
-      style={{backgroundColor: THEME_COLOR}}
+      style={theme.styles.navBar}
     />
 
     return (
@@ -100,7 +149,7 @@ export default class MyPage extends Component {
                 size={40}
                 style={{
                   marginRight: 10,
-                  color: THEME_COLOR
+                  color: theme.themeColor
                 }}
               />
               <Text>GitHub Popular</Text>
@@ -110,7 +159,7 @@ export default class MyPage extends Component {
               size={16}
               style={{
                 marginRight: 10,
-                color: THEME_COLOR
+                color: theme.themeColor
               }}
             />
           </TouchableOpacity>
@@ -155,29 +204,34 @@ export default class MyPage extends Component {
   }
 }
 
-const
-  styles = StyleSheet.create({
-    // container: {
-    //   flex: 1,
-    //   backgroundColor: '#F5FCFF'
-    // },
-    item: {
-      height: 90,
-      padding: 10,
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      backgroundColor: '#fff'
-    },
-    about_left: {
-      flexDirection: 'row',
-      alignItems: 'center'
-    },
-    groupTitle: {
-      marginLeft: 10,
-      marginTop: 10,
-      marginBottom: 10,
-      fontSize: 12,
-      color: 'gray'
-    }
-  })
+const mapStateToProps = state => ({
+  theme: state.theme.theme,
+})
+
+const mapDispatchToProps = dispatch => ({
+  onShowCustomThemeView: (show) => dispatch(actions.onShowCustomThemeView(show))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(MyPage)
+
+const styles = StyleSheet.create({
+  item: {
+    height: 90,
+    padding: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#fff'
+  },
+  about_left: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  groupTitle: {
+    marginLeft: 10,
+    marginTop: 10,
+    marginBottom: 10,
+    fontSize: 12,
+    color: 'gray'
+  }
+})

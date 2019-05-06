@@ -1,15 +1,22 @@
 import React, {Component} from 'react';
+import {connect} from "react-redux";
 import {StyleSheet, Text, View} from 'react-native';
-import NavigationUtil from '../navigator/NavigationUtil'
+import NavigationUtil from '../navigator/NavigationUtil';
+import actions from '../action';
 
 /**
  * 欢迎页
  *
  * */
 
-export default class WelcomePage extends Component {
-
+class WelcomePage extends Component {
   componentDidMount() {
+    /**
+     * 初始化主题
+     * */
+    this.props.onThemeInit()
+
+
     this.timer = setTimeout(()=>{
       // const {navigation} = this.props
       // navigation.navigate('Main')
@@ -32,6 +39,13 @@ export default class WelcomePage extends Component {
     )
   }
 }
+
+const mapDispatchToProps = dispatch => ({
+  onThemeInit: () => dispatch(actions.onThemeInit())
+})
+
+export default connect(null, mapDispatchToProps)(WelcomePage)
+// export default WelcomePage
 
 const styles = StyleSheet.create({
   container: {

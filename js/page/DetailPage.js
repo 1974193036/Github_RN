@@ -127,13 +127,14 @@ export default class DetailPage extends Component {
   }
 
   render() {
+    const {theme} = this.params
     const titleLayoutStyle = this.state.title.length > 20 ? {paddingRight: 30} : null
     let navgiationBar = <NavigationBar
       title={this.state.title}
       leftButton={ViewUtil.getLeftBackButton(() => this.onBack())}
       rightButton={this.renderRightButton()}
       titleLayoutStyle={titleLayoutStyle}
-      style={{backgroundColor: THEME_COLOR}}
+      style={theme.styles.navBar}
     />
     return (
       <View style={styles.container}>

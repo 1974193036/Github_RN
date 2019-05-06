@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 // import {createAppContainer, createBottomTabNavigator} from 'react-navigation';
 // import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 // import Entypo from 'react-native-vector-icons/Entypo';
-import {StyleSheet, BackHandler} from 'react-native';
+import {StyleSheet, BackHandler, View} from 'react-native';
 // import PopularPage from './PopularPage';
 // import TrendingPage from './TrendingPage';
 // import FavoritePage from './FavoritePage';
@@ -12,6 +12,8 @@ import NavigationUtil from "../navigator/NavigationUtil"
 import { connect } from 'react-redux';
 import { NavigationActions } from "react-navigation";
 import BackPressComponent from "../common/BackPressComponent";
+import CustomTheme from '../page/CustomTheme';
+import actions from "../action";
 /**
  * NavigationActions：处理安卓的物理返回键
  * BackHandler：处理安卓的物理返回键
@@ -142,18 +144,37 @@ class HomePage extends Component {
   //   const Tab = this._tabNavigator()
   //   return <Tab></Tab>
   // }
+  renderCustomThemeView() {
+    const {customThemeViewVisible, onShowCustomThemeView} = this.props
+    return (<CustomTheme
+      visible={customThemeViewVisible}
+      onClose={() => onShowCustomThemeView(false)}
+    />)
+  }
+
   render() {
     /** 让内层嵌套的路由跳转到外层路由，在外层保存跳转对象
      *  NavigationUtil.navigation 即外层保存的跳转对象
      * */
     NavigationUtil.navigation = this.props.navigation
-    return <DynamicTabNavigator/>
+    return (
+      <View style={{flex: 1}}>
+        <DynamicTabNavigator/>
+        {this.renderCustomThemeView()}
+      </View>
+    )
   }
 }
 
 const mapStateToProps = state => ({
-  nav: state.nav
+  nav: state.nav,
+  theme: state.theme.theme,
+  customThemeViewVisible: state.theme.customThemeViewVisible,
+})
+
+const mapDispatchToProps = dispatch => ({
+  onShowCustomThemeView: (show) => dispatch(actions.onShowCustomThemeView(show)),
 })
 
 // export default HomePage
-export default connect(mapStateToProps, null)(HomePage)
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage)

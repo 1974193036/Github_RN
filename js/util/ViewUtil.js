@@ -20,6 +20,19 @@ export default class ViewUtil {
   }
 
   /**
+   * 获取右侧文字按钮
+   * @param title
+   * @param {回调方法} callback
+   */
+  static getRightBackButton(title, callback) {
+    return <TouchableOpacity
+      style={{alignItems: 'center'}}
+      onPress={callback}>
+      <Text style={{fontSize: 20, color: '#fff', marginRight: 10}}>{title}</Text>
+    </TouchableOpacity>
+  }
+
+  /**
    * 分享按钮
    * @param {回调方法} callback
    */

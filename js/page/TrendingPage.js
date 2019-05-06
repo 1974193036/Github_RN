@@ -1,5 +1,17 @@
 import React, {Component} from 'react';
-import {ActivityIndicator, Button, DeviceInfo, DeviceEventEmitter, FlatList, RefreshControl, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Button,
+  DeviceEventEmitter,
+  DeviceInfo,
+  FlatList,
+  RefreshControl,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native';
 import {createAppContainer, createMaterialTopTabNavigator} from 'react-navigation';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import NavigationUtil from '../navigator/NavigationUtil';
@@ -8,12 +20,14 @@ import {connect} from 'react-redux';
 import actions from '../action/index';
 import TrendingItem from '../common/TrendingItem';
 import NavigationBar from '../common/NavigationBar';
-import TrendingDialog, { TimeSpans } from '../common/TrendingDialog';
+import TrendingDialog, {TimeSpans} from '../common/TrendingDialog';
 import {FLAG_STORAGE} from '../expand/dao/DataStore';
 import FavoriteDao from '../expand/dao/FavoriteDao';
 import FavoriteUtil from '../util/FavoriteUtil';
 import EventTypes from '../util/EventTypes';
 import EventBus from 'react-native-event-bus';
+import {FLAG_LANGUAGE} from '../expand/dao/LanguageDao';
+import ArrayUtil from '../util/ArrayUtil';
 
 // export default class PopularPage extends Component {
 //   render() {
@@ -90,7 +104,7 @@ class TrendingContent extends Component {
   }
 
   _store() {
-    const { trending } = this.props
+    const {trending} = this.props
     let store = trending[this.storeName]
     // 避免一些tab项对应的数据未加载完成而报错
     if (!store) {
@@ -111,6 +125,7 @@ class TrendingContent extends Component {
 
   renderItem(data) {
     const item = data.item
+    const {theme} = this.props
     // item = {
     //   item: [{...}, {...}, {...}],
     //   isFavorite: false
@@ -123,8 +138,10 @@ class TrendingContent extends Component {
     // )
     return (<TrendingItem
       projectModel={item}
+      theme={theme}
       onSelect={(callback) => {
         NavigationUtil.goPage('DetailPage', {
+          theme,
           projectModel: item,
           flag: FLAG_STORAGE.flag_trending,
           callback
@@ -145,6 +162,7 @@ class TrendingContent extends Component {
   }
 
   render() {
+    const {theme}=this.props
     let store = this._store()
     console.log(this.timeSpan.searchText)
     return (
@@ -157,9 +175,9 @@ class TrendingContent extends Component {
           refreshControl={
             <RefreshControl
               title={'加载中...'}
-              titleColor={'red'} // ios的 '加载中' 文字颜色
-              tintColor={'red'} // ios的 loading 颜色
-              colors={['green']} // android的 loading 颜色
+              titleColor={theme.themeColor} // ios的 '加载中' 文字颜色
+              tintColor={theme.themeColor} // ios的 loading 颜色
+              colors={[theme.themeColor]} // android的 loading 颜色
               refreshing={store.isLoading} // 显示下拉刷新loading
               onRefresh={() => this.loadData()} // 下拉刷新回调
             />
@@ -194,7 +212,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   onRefreshTrending: (storeName, url, pageSize, favoriteDao) => dispatch(actions.onRefreshTrending(storeName, url, pageSize, favoriteDao)),
   onLoadMoreTrending: (storeName, pageIndex, pageSize, items, favoriteDao, callback) => dispatch(actions.onLoadMoreTrending(storeName, pageIndex, pageSize, items, favoriteDao, callback)),
-  onFlushTrendingFavorite: (storeName, pageIndex, pageSize, items, favoriteDao) => {dispatch(actions.onFlushTrendingFavorite(storeName, pageIndex, pageSize, items, favoriteDao))}
+  onFlushTrendingFavorite: (storeName, pageIndex, pageSize, items, favoriteDao) => {
+    dispatch(actions.onFlushTrendingFavorite(storeName, pageIndex, pageSize, items, favoriteDao))
+  }
 })
 
 const TrendingTabContent = connect(mapStateToProps, mapDispatchToProps)(TrendingContent)
@@ -224,7 +244,10 @@ const TrendingTabContent = connect(mapStateToProps, mapDispatchToProps)(Trending
 class TrendingPage extends Component {
   constructor(props) {
     super(props)
-    this.tabNames = ['All', 'Objective-c', 'Swift', 'C++']
+    // this.tabNames = ['All', 'Objective-c', 'Swift', 'C++']
+    const {onLoadLanguage} = this.props
+    onLoadLanguage(FLAG_LANGUAGE.flag_dao_language)
+    this.preLanguages = [] // 保存上一次的tab项内容
     this.state = {
       timeSpan: TimeSpans[0],
     }
@@ -237,12 +260,17 @@ class TrendingPage extends Component {
    * screen: props => <PopularContent {...props} tabLabel={item}/>,
    * */
   _genTabs() {
+    const {languages} = this.props
+    const {theme} = this.props
     const tabs = {}
-    this.tabNames.map((item, index) => {
-      tabs[`tab${index}`] = {
-        screen: props => <TrendingTabContent {...props} tabLabel={item} timeSpan={this.state.timeSpan}/>,
-        navigationOptions: {
-          title: item
+    this.preLanguages = languages
+    languages.map((item, index) => {
+      if (item.checked) {
+        tabs[`tab${index}`] = {
+          screen: props => <TrendingTabContent {...props} tabLabel={item.name} timeSpan={this.state.timeSpan} theme={theme}/>,
+          navigationOptions: {
+            title: item.name
+          }
         }
       }
     })
@@ -268,27 +296,32 @@ class TrendingPage extends Component {
   _tabNavigator() {
     // const topTab = createMaterialTopTabNavigator(TABS)
 
+    const {theme} = this.props
+    const {languages} = this.props
+
     /**
      * 优化效果：
-     * 根据需要选择是否重新创建 tabNavigator
+     * 根据需要选择，并且tab项内容是否改变，来重新创建 tabNavigator
      * */
-    if (this.topTab) {
+    if (theme === this.theme && this.topTab && ArrayUtil.isEqual(languages, this.preLanguages)) {
+      this.theme = theme
       return this.topTab
     }
 
-    this.topTab = createAppContainer(createMaterialTopTabNavigator(this._genTabs(), {
+    this.topTab = languages.length > 0 ? createAppContainer(createMaterialTopTabNavigator(this._genTabs(), {
       tabBarOptions: {
         tabStyle: styles.tabStyle,
         upperCaseLabel: false, // 是否使标签大写，默认true
         scrollEnabled: true, // 选项卡滚动，默认false
         style: {
-          backgroundColor: '#678', // TabBar的背景色
+          backgroundColor: theme.themeColor, // TabBar的背景色
           height: 30, // 解决开启 scrollEnabled 后在android上初次加载时闪烁问题
         },
         indicatorStyle: styles.indicatorStyle, // 标签指示器颜色，切换滑动的那条线
         labelStyle: styles.labelStyle, // 文字的样式
-      }
-    }))
+      },
+      lazy: true // 懒加载，只渲染一个tab，当点击某个tab栏目时候才加载这个tab下的数据
+    })) : null
     return this.topTab
   }
 
@@ -298,7 +331,7 @@ class TrendingPage extends Component {
       underlayColor='transparent'
       onPress={() => this.dialog.show()}
     >
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <Text style={{
           fontSize: 18,
           color: '#FFFFFF',
@@ -317,14 +350,15 @@ class TrendingPage extends Component {
 
   // 自定义状态栏，导航栏
   _customNavigationBar() {
+    const {theme} = this.props
     let statusBar = {
-      backgroundColor: THEME_COLOR,
+      backgroundColor: theme.themeColor,
       barStyle: 'light-content'
     }
     let navgiationBar = <NavigationBar
       titleView={this._titleView()}
       statusBar={statusBar}
-      style={{ backgroundColor: THEME_COLOR }}
+      style={theme.styles.navBar}
     />
     return navgiationBar
   }
@@ -334,7 +368,7 @@ class TrendingPage extends Component {
     const Top = this._tabNavigator()
     const customNavigationBar = this._customNavigationBar()
     return (
-      <View style={{flex: 1, marginTop: DeviceInfo.isIPhoneX_deprecated ? 0 : 0 }}>
+      <View style={{flex: 1, marginTop: DeviceInfo.isIPhoneX_deprecated ? 0 : 0}}>
         {/*<View style={{backgroundColor: 'gold', height: 32}}>*/}
         {/*<StatusBar barStyle = 'light-content' hidden="false"></StatusBar>*/}
         {/*</View>*/}
@@ -342,14 +376,28 @@ class TrendingPage extends Component {
         {/*<Text>最热</Text>*/}
         {/*</View>*/}
         {customNavigationBar}
-        <Top></Top>
+        {Top && <Top/>}
+        {/*<Top></Top>*/}
         {this.renderTrendingDialog()}
       </View>
     )
   }
 }
 
-export default TrendingPage
+/**
+ * 针对标签tab的管理控制
+ * */
+const mapTrendingStateToProps = state => ({
+  languages: state.language.languages,
+  theme: state.theme.theme
+})
+
+const mapTrendingDispatchToProps = dispatch => ({
+  onLoadLanguage: (flag) => dispatch(actions.onLoadLanguage(flag)),
+})
+
+export default connect(mapTrendingStateToProps, mapTrendingDispatchToProps)(TrendingPage)
+// export default TrendingPage
 
 
 const styles = StyleSheet.create({

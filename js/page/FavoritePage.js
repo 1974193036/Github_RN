@@ -80,15 +80,18 @@ class FavoriteTab extends Component {
   }
 
   renderItem(data) {
+    const {theme} = this.props
     const {item} = data
     const Item = this.storeName === FLAG_STORAGE.flag_popular ? PopularItem : TrendingItem
     return <Item
+      theme={theme}
       projectModel={item}
       onSelect={(callback) => {
         NavigationUtil.goPage('DetailPage', {
           projectModel: item,
           flag: this.storeName,
           whoGo: 'favorite_go',
+          theme,
           callback
         })
       }}
@@ -97,6 +100,7 @@ class FavoriteTab extends Component {
   }
 
   render() {
+    const {theme} = this.props
     let store = this._store()
     return (
       <View style={styles.container}>
@@ -107,9 +111,9 @@ class FavoriteTab extends Component {
           refreshControl={
             <RefreshControl
               title={'加载中...'}
-              titleColor={'red'} // ios的 '加载中' 文字颜色
-              tintColor={'red'} // ios的 loading 颜色
-              colors={['green']} // android的 loading 颜色
+              titleColor={theme.themeColor} // ios的 '加载中' 文字颜色
+              tintColor={theme.themeColor} // ios的 loading 颜色
+              colors={[theme.themeColor]} // android的 loading 颜色
               refreshing={store.isLoading} // 显示下拉刷新loading
               onRefresh={() => this.loadData(true)} // 下拉刷新回调
             />
@@ -131,7 +135,7 @@ const mapDispatchToProps = disptch => ({
 const FavoriteTabPage = connect(mapStateToProps, mapDispatchToProps)(FavoriteTab)
 
 
-export default class FavoritePage extends Component {
+class FavoritePage extends Component {
   constructor(props) {
     super(props)
     this.tabNames = [
@@ -142,9 +146,10 @@ export default class FavoritePage extends Component {
 
   _genTabs() {
     const tabs = {};
+    const {theme} = this.props;
     this.tabNames.forEach((item, index) => {
       tabs[`tab${index}`] = {
-        screen: props => <FavoriteTabPage {...props} tabLabel={item.name} flag={item.flag}/>,
+        screen: props => <FavoriteTabPage {...props} tabLabel={item.name} flag={item.flag} theme={theme}/>,
         navigationOptions: {
           title: item.name
         }
@@ -154,14 +159,15 @@ export default class FavoritePage extends Component {
   }
 
   render() {
+    const {theme} = this.props
     let statusBar = {
-      backgroundColor: THEME_COLOR,
+      backgroundColor: theme.themeColor,
       barStyle: 'light-content',
     }
     let navgiationBar = <NavigationBar
       title={'收藏'}
       statusBar={statusBar}
-      style={{backgroundColor: THEME_COLOR}}
+      style={theme.styles.navBar}
     />
     const TabNavigator = createAppContainer(createMaterialTopTabNavigator(this._genTabs(), {
         tabBarOptions: {
@@ -169,7 +175,7 @@ export default class FavoritePage extends Component {
           upperCaseLabel: false,
           scrollEnabled: false,
           style: {
-            backgroundColor: '#678',
+            backgroundColor: theme.themeColor,
             height: 30
           },
           indicatorStyle: styles.indicatorStyle, // 标签指示器颜色，切换滑动的那条线
@@ -183,6 +189,11 @@ export default class FavoritePage extends Component {
     </View>
   }
 }
+
+const mapFavoriteStateToProps = state => ({
+  theme: state.theme.theme,
+})
+export default connect(mapFavoriteStateToProps)(FavoritePage)
 
 const styles = StyleSheet.create({
   container: {

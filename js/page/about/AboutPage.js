@@ -60,12 +60,12 @@ export default class AboutPage extends Component {
         break
     }
     if (RouteName) {
-      NavigationUtil.goPage(RouteName, params)
+      NavigationUtil.goPage(RouteName, {...params, theme: this.params.theme})
     }
   }
 
   getItem(menu) {
-    return ViewUtil.getMenuItem(() => this.onClick(menu), menu, THEME_COLOR)
+    return ViewUtil.getMenuItem(() => this.onClick(menu), menu, this.params.theme.themeColor)
   }
 
   render() {

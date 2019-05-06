@@ -1,22 +1,19 @@
-import { onThemeChange } from './theme';
-import { onRefreshPopular, onLoadMorePopular, onFlushPopularFavorite } from './popular';
-import { onRefreshTrending, onLoadMoreTrending, onFlushTrendingFavorite } from './trending';
-import { onLoadFavoriteData } from './favorite';
+import {onFlushPopularFavorite, onLoadMorePopular, onRefreshPopular} from './popular';
+import {onFlushTrendingFavorite, onLoadMoreTrending, onRefreshTrending} from './trending';
+import {onLoadFavoriteData} from './favorite';
+import {onLoadLanguage} from './language';
+import {onShowCustomThemeView, onThemeChange, onThemeInit} from './theme';
 
 export default {
-  onThemeChange,
   onRefreshPopular,
   onLoadMorePopular,
   onFlushPopularFavorite,
   onRefreshTrending,
   onLoadMoreTrending,
   onFlushTrendingFavorite,
-  onLoadFavoriteData
-  // onRefreshPopular,
-  // onLoadMorePopular,
-  // onRefreshTrending,
-  // onLoadMoreTrending,
-  // onLoadFavoriteData,
-  // onFlushPopularFavorite,
-  // onFlushTrendingFavorite
+  onLoadFavoriteData,
+  onLoadLanguage,
+  onThemeChange,
+  onThemeInit,
+  onShowCustomThemeView
 }

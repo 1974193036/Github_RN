@@ -50,7 +50,8 @@ export default class AboutMePage extends Component {
     if (tab.url) {
       NavigationUtil.goPage('WebViewPage', {
         title: tab.title,
-        url: tab.url
+        url: tab.url,
+        theme: this.params.theme
       })
       return
     }
@@ -89,7 +90,7 @@ export default class AboutMePage extends Component {
       this.setState({
         [key]: !this.state[key]
       })
-    }, menu.name, THEME_COLOR, Ionicons, menu.icon, isShow ? 'ios-arrow-up' : 'ios-arrow-down')
+    }, menu.name, this.params.theme.themeColor, Ionicons, menu.icon, isShow ? 'ios-arrow-up' : 'ios-arrow-down')
   }
 
   renderItems(dic, isShowAccout) {
@@ -101,7 +102,7 @@ export default class AboutMePage extends Component {
         <View
           key={i}
         >
-          {ViewUtil.getSettingItem(() => this.onClick(dic[i]), title, THEME_COLOR)}
+          {ViewUtil.getSettingItem(() => this.onClick(dic[i]), title, this.params.theme.themeColor)}
           <View style={GlobalStyles.line}/>
         </View>
       )
