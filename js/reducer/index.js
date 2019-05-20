@@ -4,6 +4,7 @@ import popular from './popular';
 import trending from './trending';
 import favorite from './favorite';
 import language from './language';
+import search from './search';
 import { rootCom, RootNavigator } from '../navigator/AppNavigator';
 
 // 1.制定默认 state
@@ -23,7 +24,8 @@ const reducers = combineReducers({
   popular: popular,
   trending: trending,
   favorite: favorite,
-  language: language
+  language: language,
+  search: search
 })
 
 export default reducers

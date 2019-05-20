@@ -8,8 +8,10 @@ import {
   SafeAreaView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View
 } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {createAppContainer, createMaterialTopTabNavigator} from 'react-navigation';
 import NavigationUtil from '../navigator/NavigationUtil';
 import Toast from 'react-native-easy-toast';
@@ -62,11 +64,16 @@ class PopularContent extends Component {
         this.loadData(null, true)
       }
     })
+
+    EventBus.getInstance().addListener(EventTypes.back, this.backListener = () => {
+      this.loadData(null, true)
+    })
   }
 
   componentWillUnmount() {
     EventBus.getInstance().removeListener(this.favoriteChangeListener)
     EventBus.getInstance().removeListener(this.bottomTabSelectListener)
+    EventBus.getInstance().removeListener(this.backListener)
   }
 
   loadData(loadMore, refreshFavorite) {
@@ -282,6 +289,27 @@ class PopularPage extends Component {
     return keys.length > 0 ? createAppContainer(topTab) : null
   }
 
+  renderRightButton() {
+    const {theme} = this.props
+    return (<TouchableOpacity
+      onPress={() => {
+        // AnalyticsUtil.track("SearchButtonClick");
+        NavigationUtil.goPage('SearchPage', {theme: theme})
+      }}
+    >
+      <View style={{padding: 5, marginRight: 8}}>
+        <Ionicons
+          name={'ios-search'}
+          size={24}
+          style={{
+            marginRight: 8,
+            alignSelf: 'center',
+            color: '#fff',
+          }}/>
+      </View>
+    </TouchableOpacity>)
+  }
+
   // 自定义状态栏，导航栏
   _customNavigationBar() {
     const {theme} = this.props
@@ -293,6 +321,7 @@ class PopularPage extends Component {
       title={'最热'}
       statusBar={statusBar}
       style={theme.styles.navBar}
+      rightButton={this.renderRightButton()}
     />
     return navgiationBar
   }

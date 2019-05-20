@@ -9,8 +9,8 @@ import Utils from "../util/Util";
  * @param data
  * @param pageSize
  * */
-export function handleData(actionType, dispatch, storeName, data, pageSize, favoriteDao) {
-  let fixItems = [];
+export function handleData(actionType, dispatch, storeName, data, pageSize, favoriteDao, params) {
+  let fixItems = []
   if (data && data.data) {
     if (Array.isArray(data.data)) {
       fixItems = data.data
@@ -27,7 +27,8 @@ export function handleData(actionType, dispatch, storeName, data, pageSize, favo
       items: fixItems,
       projectModels: projectModels,
       storeName,
-      pageIndex: 1
+      pageIndex: 1,
+      ...params
     })
   })
   // dispatch({
@@ -57,5 +58,12 @@ export async function _projectModels(showItems, favoriteDao, callback) {
   }
   if (typeof callback === 'function') {
     callback(projectModels)
+  }
+}
+
+
+export const doCallBack = (callBack, object) => {
+  if (typeof callBack === 'function') {
+    callBack(object)
   }
 }
