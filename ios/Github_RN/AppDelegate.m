@@ -6,21 +6,33 @@
  */
 
 #import "AppDelegate.h"
-
-#import <React/RCTBridge.h>
+#import "RNUMConfigure.h"
+#import "UMAnalytics/MobClick.h"
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
+#import "RNUMConfigure.h"
+#import "Constants.h"
+#import <UMShare/UMShare.h>
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
-  RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
-                                                   moduleName:@"Github_RN"
-                                            initialProperties:nil];
+  [self initUmeng];
+  NSURL *jsCodeLocation;
 
-  rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
+
+    #ifdef DEBUG
+        jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
+    #else
+
+    #endif
+
+  RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
+                                                      moduleName:@"Github_RN"
+                                               initialProperties:nil
+                                                   launchOptions:launchOptions];
+  rootView.backgroundColor = [UIColor blackColor];
 
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
   UIViewController *rootViewController = [UIViewController new];
@@ -29,14 +41,18 @@
   [self.window makeKeyAndVisible];
   return YES;
 }
-
-- (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
-#if DEBUG
-  return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
-#else
-  return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
-#endif
+  BOOL result = [[UMSocialManager defaultManager] handleOpenURL:url];
+  if (!result) {
+    // 其他如支付等SDK的回调
+  }
+  return result;
 }
-
+-(void)initUmeng{
+  // UMeng ??
+  [MobClick setScenarioType:E_UM_NORMAL];
+  [UMConfigure setLogEnabled:YES];
+  [RNUMConfigure initWithAppkey:UM_AppKey channel:UM_ChannelId];
+}
 @end

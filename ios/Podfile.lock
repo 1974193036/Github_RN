@@ -1,0 +1,57 @@
+PODS:
+  - UMCAnalytics (6.0.3):
+    - UMCCommon
+  - UMCCommon (2.0.1)
+  - UMCCommonLog (1.0.0)
+  - UMCSecurityPlugins (1.0.6)
+  - UMCShare/Core (6.9.5):
+    - UMCCommon
+  - UMCShare/Social/Email (6.9.5):
+    - UMCCommon
+    - UMCShare/Core
+  - UMCShare/Social/ReducedQQ (6.9.5):
+    - UMCCommon
+    - UMCShare/Core
+  - UMCShare/Social/ReducedSina (6.9.5):
+    - UMCCommon
+    - UMCShare/Core
+  - UMCShare/Social/ReducedWeChat (6.9.5):
+    - UMCCommon
+    - UMCShare/Core
+  - UMCShare/Social/SMS (6.9.5):
+    - UMCCommon
+    - UMCShare/Core
+  - UMCShare/UI (6.9.5):
+    - UMCCommon
+    - UMCShare/Core
+
+DEPENDENCIES:
+  - UMCAnalytics
+  - UMCCommon
+  - UMCCommonLog
+  - UMCSecurityPlugins
+  - UMCShare/Social/Email
+  - UMCShare/Social/ReducedQQ
+  - UMCShare/Social/ReducedSina
+  - UMCShare/Social/ReducedWeChat
+  - UMCShare/Social/SMS
+  - UMCShare/UI
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - UMCAnalytics
+    - UMCCommon
+    - UMCCommonLog
+    - UMCSecurityPlugins
+    - UMCShare
+
+SPEC CHECKSUMS:
+  UMCAnalytics: ff58714ada407682c4a07548156f94bcec92f055
+  UMCCommon: 0263a057a2e1ae1da4c8308541e56904a493ce13
+  UMCCommonLog: 05a2d5de21858e3d870551562cff405c1366d244
+  UMCSecurityPlugins: 0831a08f3988f3cea9f1d3a7626cd9bee4fef150
+  UMCShare: 552b29753f1b4da87b51d96545ed19e6263df397
+
+PODFILE CHECKSUM: 171a4111a14757194733d4a06dae4283ea78cd8d
+
+COCOAPODS: 1.6.2

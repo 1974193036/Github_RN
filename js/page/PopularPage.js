@@ -25,6 +25,7 @@ import FavoriteUtil from '../util/FavoriteUtil';
 import EventTypes from '../util/EventTypes';
 import EventBus from 'react-native-event-bus';
 import {FLAG_LANGUAGE} from '../expand/dao/LanguageDao';
+import AnalyticsUtil from '../util/AnalyticsUtil';
 
 // export default class PopularPage extends Component {
 //   render() {
@@ -293,7 +294,13 @@ class PopularPage extends Component {
     const {theme} = this.props
     return (<TouchableOpacity
       onPress={() => {
-        // AnalyticsUtil.track("SearchButtonClick");
+        /**
+         * 友盟数据统计-事件埋点
+         * */
+        AnalyticsUtil.onEvent('SearchButtonClick')
+        /**
+         * 跳转页面
+         * */
         NavigationUtil.goPage('SearchPage', {theme: theme})
       }}
     >

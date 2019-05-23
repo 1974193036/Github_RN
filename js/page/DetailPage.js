@@ -11,6 +11,8 @@ import FavoriteUtil from '../util/FavoriteUtil';
 import EventTypes from '../util/EventTypes';
 import EventBus from 'react-native-event-bus';
 import {FLAG_STORAGE} from '../expand/dao/DataStore';
+import share from "../res/data/share";
+import ShareUtil from "../util/ShareUtil";
 
 const THEME_COLOR = '#678';
 const TRENDING_URL ='https://github.com/';
@@ -121,7 +123,10 @@ export default class DetailPage extends Component {
         />
       </TouchableOpacity>
       {ViewUtil.getShareButton(() => {
-
+        let shareApp = share.share_app
+        ShareUtil.shareboard(shareApp.content, shareApp.imgUrl, this.url, shareApp.title, [0, 1, 2, 3, 4, 5, 6], (code, message) => {
+          console.log("result:" + code + message)
+        })
       })}
     </View>)
   }

@@ -5,6 +5,9 @@ import BackPressComponent from "../../common/BackPressComponent";
 import NavigationUtil from "../../navigator/NavigationUtil";
 import ViewUtil from '../../util/ViewUtil';
 import GlobalStyles from '../../res/style/GlobalStyles';
+import ShareUtil from '../../util/ShareUtil'
+import share from '../../res/data/share.json'
+
 
 const THEME_COLOR = '#678';
 const WINDOW = Dimensions.get('window');
@@ -52,7 +55,21 @@ export default class AboutCommon {
   }
 
   onShare() {
+    let shareApp
+    const {flagAbout} = this.props
+    if (flagAbout === FLAG_ABOUT.flag_about_me) {
+      shareApp = share.share_app
+    } else {
+      shareApp = share.share_blog
+    }
+    ShareUtil.shareboard(shareApp.content, shareApp.imgUrl, shareApp.url, shareApp.title, [0, 1, 2, 3, 4, 5, 6], (code, message) => {
+      console.log('result:' + code + message)
+    })
 
+    // 第三方登录
+    // ShareUtil.auth(0, e => {
+    //   console.log("result:" + e);
+    // })
   }
 
   getParallaxRenderConfig(params) {
