@@ -2,18 +2,20 @@ import React, {Component} from 'react';
 // import {createAppContainer, createBottomTabNavigator} from 'react-navigation';
 // import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 // import Entypo from 'react-native-vector-icons/Entypo';
-import {StyleSheet, BackHandler, View} from 'react-native';
+import {BackHandler, StyleSheet, View} from 'react-native';
 // import PopularPage from './PopularPage';
 // import TrendingPage from './TrendingPage';
 // import FavoritePage from './FavoritePage';
 // import MyPage from './MyPage';
 import DynamicTabNavigator from '../navigator/DynamicTabNavigator';
 import NavigationUtil from "../navigator/NavigationUtil"
-import { connect } from 'react-redux';
-import { NavigationActions } from "react-navigation";
+import {connect} from 'react-redux';
+import {NavigationActions} from "react-navigation";
 import BackPressComponent from "../common/BackPressComponent";
 import CustomTheme from '../page/CustomTheme';
 import actions from "../action";
+import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
+
 /**
  * NavigationActions：处理安卓的物理返回键
  * BackHandler：处理安卓的物理返回键
@@ -103,7 +105,7 @@ class HomePage extends Component {
   }
 
   componentDidMount() {
-     // BackHandler.addEventListener('hardwareBackPress', this.onBackPress)
+    // BackHandler.addEventListener('hardwareBackPress', this.onBackPress)
     this.backPress.componentDidMount()
   }
 
@@ -153,15 +155,16 @@ class HomePage extends Component {
   }
 
   render() {
+    const {theme} = this.props
     /** 让内层嵌套的路由跳转到外层路由，在外层保存跳转对象
      *  NavigationUtil.navigation 即外层保存的跳转对象
      * */
     NavigationUtil.navigation = this.props.navigation
     return (
-      <View style={{flex: 1}}>
+      <SafeAreaViewPlus topColor={theme.themeColor}>
         <DynamicTabNavigator/>
         {this.renderCustomThemeView()}
-      </View>
+      </SafeAreaViewPlus>
     )
   }
 }

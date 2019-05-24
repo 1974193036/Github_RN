@@ -10,6 +10,7 @@ import {Alert, ScrollView, StyleSheet, Text, TouchableHighlight, TouchableOpacit
 import ArrayUtil from '../util/ArrayUtil';
 import SortableListView from 'react-native-sortable-listview';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 
 const THEME_COLOR = '#678';
 
@@ -170,7 +171,7 @@ class SortKeyPage extends Component {
       rightButton={ViewUtil.getRightBackButton(rightButtonTitle, () => this.onSave())}
     />
     return (
-      <View style={styles.container}>
+      <SafeAreaViewPlus topColor={this.params.theme.themeColor}>
         {navgiationBar}
         <SortableListView
           data={this.state.checkedArray}
@@ -181,7 +182,7 @@ class SortKeyPage extends Component {
           }}
           renderRow={row => <SortCell data={row} {...this.params}/>}
         />
-      </View>
+      </SafeAreaViewPlus>
     )
   }
 }

@@ -11,6 +11,7 @@ import {FLAG_LANGUAGE} from '../expand/dao/LanguageDao';
 import {connect} from 'react-redux';
 import actions from '../action';
 
+
 const THEME_COLOR = '#678';
 
 class MyPage extends Component {

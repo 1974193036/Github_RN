@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import {StyleSheet, Text, View} from 'react-native';
 import NavigationUtil from '../navigator/NavigationUtil';
 import actions from '../action';
+import SplashScreen from 'react-native-splash-screen'
 
 /**
  * 欢迎页
@@ -20,7 +21,7 @@ class WelcomePage extends Component {
     this.timer = setTimeout(()=>{
       // const {navigation} = this.props
       // navigation.navigate('Main')
-
+      SplashScreen.hide()
       NavigationUtil.resetToHomePage({
         navigation: this.props.navigation
       })
@@ -32,11 +33,12 @@ class WelcomePage extends Component {
   }
 
   render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>WelcomePage</Text>
-      </View>
-    )
+    // return (
+    //   <View style={styles.container}>
+    //     <Text style={styles.welcome}>WelcomePage</Text>
+    //   </View>
+    // )
+    return null
   }
 }
 

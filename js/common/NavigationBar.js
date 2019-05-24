@@ -107,6 +107,6 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   statusBar: {
-    height: Platform.OS === 'ios' ? (DeviceInfo.isIPhoneX_deprecated ? 32 : STATUS_BAR_HEIGHT) : 0,
+    height: Platform.OS === 'ios' ? (DeviceInfo.isIPhoneX_deprecated ? 0 : STATUS_BAR_HEIGHT) : 0,
   }
 })

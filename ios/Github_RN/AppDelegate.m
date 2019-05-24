@@ -13,6 +13,7 @@
 #import "RNUMConfigure.h"
 #import "Constants.h"
 #import <UMShare/UMShare.h>
+#import "RNSplashScreen.h"
 
 @implementation AppDelegate
 
@@ -39,6 +40,7 @@
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+  [RNSplashScreen show];
   return YES;
 }
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation

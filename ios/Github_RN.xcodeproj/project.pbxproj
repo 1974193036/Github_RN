@@ -38,6 +38,7 @@
 		2D16E6881FA4F8E400B85C8A /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D16E6891FA4F8E400B85C8A /* libReact.a */; };
 		2DCD954D1E0B4F2C00145EB5 /* Github_RNTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* Github_RNTests.m */; };
 		2DF0FFEE2056DD460020B375 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
+		426C6FA72297E51C00F0CCAF /* libSplashScreen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CDD3A42297DE4A0004AD6B /* libSplashScreen.a */; };
 		4292057A2293D00700D2D966 /* UMShareModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 4292054A2293D00600D2D966 /* UMShareModule.m */; };
 		4292057B2293D00700D2D966 /* RNUMConfigure.m in Sources */ = {isa = PBXBuildFile; fileRef = 429205772293D00700D2D966 /* RNUMConfigure.m */; };
 		4292057C2293D00700D2D966 /* UMAnalyticsModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 429205782293D00700D2D966 /* UMAnalyticsModule.m */; };
@@ -276,6 +277,13 @@
 			remoteGlobalIDString = 3D3CD9321DE5FBEE00167DC4;
 			remoteInfo = "cxxreact-tvOS";
 		};
+		42CDD3A32297DE4A0004AD6B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 42CDD39F2297DE4A0004AD6B /* SplashScreen.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3D7682761D8E76B80014119E;
+			remoteInfo = SplashScreen;
+		};
 		42D780C3229557C3007F765C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 42D780BA229557C3007F765C /* Pods.xcodeproj */;
@@ -412,6 +420,7 @@
 		429205792293D00700D2D966 /* UMShareModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UMShareModule.h; path = Github_RN/UMShareModule.h; sourceTree = "<group>"; };
 		4292057D2293D10D00D2D966 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Github_RN/Images.xcassets; sourceTree = "<group>"; };
 		429205802293D10D00D2D966 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = LaunchScreen.xib; sourceTree = "<group>"; };
+		42CDD39F2297DE4A0004AD6B /* SplashScreen.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SplashScreen.xcodeproj; path = "../node_modules/react-native-splash-screen/ios/SplashScreen.xcodeproj"; sourceTree = "<group>"; };
 		42D780BA229557C3007F765C /* Pods.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Pods.xcodeproj; path = Pods/Pods.xcodeproj; sourceTree = "<group>"; };
 		433A031AE47949889B7A719D /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
@@ -453,6 +462,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				426C6FA72297E51C00F0CCAF /* libSplashScreen.a in Frameworks */,
 				ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
 				11D1A2F320CAFA9E000508D9 /* libRCTAnimation.a in Frameworks */,
@@ -645,6 +655,14 @@
 			path = Github_RN/Base.lproj;
 			sourceTree = "<group>";
 		};
+		42CDD3A02297DE4A0004AD6B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				42CDD3A42297DE4A0004AD6B /* libSplashScreen.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		42D780BB229557C3007F765C /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -725,6 +743,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				42CDD39F2297DE4A0004AD6B /* SplashScreen.xcodeproj */,
 				42D780BA229557C3007F765C /* Pods.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
@@ -976,6 +995,10 @@
 					ProductGroup = 42E3359B224E1BF8002A0E14 /* Products */;
 					ProjectRef = 992372C63D0C447DAE3F12C4 /* RNVectorIcons.xcodeproj */;
 				},
+				{
+					ProductGroup = 42CDD3A02297DE4A0004AD6B /* Products */;
+					ProjectRef = 42CDD39F2297DE4A0004AD6B /* SplashScreen.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -1182,6 +1205,13 @@
 			fileType = archive.ar;
 			path = libcxxreact.a;
 			remoteRef = 3DAD3EAA1DF850E9000B6D8A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		42CDD3A42297DE4A0004AD6B /* libSplashScreen.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libSplashScreen.a;
+			remoteRef = 42CDD3A32297DE4A0004AD6B /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		42D780C4229557C3007F765C /* libPods-Github_RN.a */ = {
@@ -1551,7 +1581,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 60A3FE7C7AE9F87F0C44724C /* Pods-Github_RN.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1567,21 +1599,18 @@
 					"$(PROJECT_DIR)/Pods/UMCSecurityPlugins/thirdparties",
 					"$(PROJECT_DIR)/Pods/UMCCommonLog/UMCommonLog",
 				);
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
-					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../node_modules/react-native-splash-screen/ios";
 				INFOPLIST_FILE = Github_RN/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Pods/UMCShare/UMShare/SocialLibraries/SMS",
-					"$(PROJECT_DIR)/Pods/UMCShare/UMShare/SocialLibraries/WeChat",
-					"$(PROJECT_DIR)/Pods/UMCShare/UMShare/SocialLibraries/Sina",
-					"$(PROJECT_DIR)/Pods/UMCShare/UMShare/SocialLibraries/Email",
-					"$(PROJECT_DIR)/Pods/UMCShare/UMShare/SocialLibraries/QQ",
+					"$(PROJECT_DIR)/Pods/UMCCommon",
+					"$(PROJECT_DIR)/Pods/UMCShare/UMShare/UMSocialUI",
+					"$(PROJECT_DIR)/Pods/UMCShare/UMShare",
+					"$(PROJECT_DIR)/Pods/UMCAnalytics",
+					"$(PROJECT_DIR)/Pods/UMCSecurityPlugins/thirdparties",
+					"$(PROJECT_DIR)/Pods/UMCCommonLog/UMCommonLog",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1592,6 +1621,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.MR-1";
 				PRODUCT_NAME = Github_RN;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SYSTEM_HEADER_SEARCH_PATHS = "";
 				USE_HEADERMAP = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1601,7 +1631,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0BF688BD34591B6A77256CCF /* Pods-Github_RN.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1616,21 +1648,18 @@
 					"$(PROJECT_DIR)/Pods/UMCSecurityPlugins/thirdparties",
 					"$(PROJECT_DIR)/Pods/UMCCommonLog/UMCommonLog",
 				);
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
-					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../node_modules/react-native-splash-screen/ios";
 				INFOPLIST_FILE = Github_RN/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Pods/UMCShare/UMShare/SocialLibraries/SMS",
-					"$(PROJECT_DIR)/Pods/UMCShare/UMShare/SocialLibraries/WeChat",
-					"$(PROJECT_DIR)/Pods/UMCShare/UMShare/SocialLibraries/Sina",
-					"$(PROJECT_DIR)/Pods/UMCShare/UMShare/SocialLibraries/Email",
-					"$(PROJECT_DIR)/Pods/UMCShare/UMShare/SocialLibraries/QQ",
+					"$(PROJECT_DIR)/Pods/UMCCommon",
+					"$(PROJECT_DIR)/Pods/UMCShare/UMShare/UMSocialUI",
+					"$(PROJECT_DIR)/Pods/UMCShare/UMShare",
+					"$(PROJECT_DIR)/Pods/UMCAnalytics",
+					"$(PROJECT_DIR)/Pods/UMCSecurityPlugins/thirdparties",
+					"$(PROJECT_DIR)/Pods/UMCCommonLog/UMCommonLog",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1640,6 +1669,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.MR-1";
 				PRODUCT_NAME = Github_RN;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SYSTEM_HEADER_SEARCH_PATHS = "";
 				USE_HEADERMAP = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

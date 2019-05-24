@@ -13,6 +13,7 @@ import EventBus from 'react-native-event-bus';
 import {FLAG_STORAGE} from '../expand/dao/DataStore';
 import share from "../res/data/share";
 import ShareUtil from "../util/ShareUtil";
+import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 
 const THEME_COLOR = '#678';
 const TRENDING_URL ='https://github.com/';
@@ -142,7 +143,7 @@ export default class DetailPage extends Component {
       style={theme.styles.navBar}
     />
     return (
-      <View style={styles.container}>
+      <SafeAreaViewPlus topColor={theme.themeColor}>
         {navgiationBar}
         {/*<Text style={styles.HomePage}>DetailPage</Text>*/}
         <WebView
@@ -151,7 +152,7 @@ export default class DetailPage extends Component {
           onNavigationStateChange={e => this.onNavigationStateChange(e)}
           source={{uri: this.state.url}}
         />
-      </View>
+      </SafeAreaViewPlus>
     )
   }
 }

@@ -5,6 +5,7 @@ import ViewUtil from '../util/ViewUtil';
 import NavigationUtil from '../navigator/NavigationUtil';
 import {NavigationActions} from "react-navigation";
 import BackPressComponent from "../common/BackPressComponent";
+import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 
 const THEME_COLOR = '#678';
 
@@ -69,7 +70,7 @@ export default class WebViewPage extends Component {
       leftButton={ViewUtil.getLeftBackButton(() => this.onBackPress())}
     />
     return (
-      <View style={styles.container}>
+      <SafeAreaViewPlus topColor={this.params.theme.themeColor}>
         {navgiationBar}
         <WebView
           ref={webView => this.webView = webView}
@@ -77,7 +78,7 @@ export default class WebViewPage extends Component {
           onNavigationStateChange={e => this.onNavigationStateChange(e)}
           source={{uri: this.state.url}}
         />
-      </View>
+      </SafeAreaViewPlus>
     )
   }
 }

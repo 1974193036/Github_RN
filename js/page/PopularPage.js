@@ -27,6 +27,7 @@ import EventBus from 'react-native-event-bus';
 import {FLAG_LANGUAGE} from '../expand/dao/LanguageDao';
 import AnalyticsUtil from '../util/AnalyticsUtil';
 
+
 // export default class PopularPage extends Component {
 //   render() {
 //     return (
@@ -337,7 +338,7 @@ class PopularPage extends Component {
     const Top = this._tabNavigator()
     const customNavigationBar = this._customNavigationBar()
     return (
-      <View style={{flex: 1, marginTop: DeviceInfo.isIPhoneX_deprecated ? 0 : 0}}>
+      <View style={{flex: 1}}>
         {/*<View style={{backgroundColor: 'gold', height: 32}}>*/}
         {/*<StatusBar barStyle = 'light-content' hidden="false"></StatusBar>*/}
         {/*</View>*/}

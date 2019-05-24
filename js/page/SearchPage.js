@@ -28,6 +28,7 @@ import {FLAG_STORAGE} from '../expand/dao/DataStore';
 import PopularItem from '../common/PopularItem';
 import FavoriteUtil from '../util/FavoriteUtil';
 import Utils from '../util/Util';
+import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 
 const PAGE_SIZE = 10; // 设为常数, 防止修改
 
@@ -138,8 +139,9 @@ class SearchPage extends Component {
       backgroundColor: theme.themeColor,
       flexDirection: 'row',
       alignItems: 'center',
-      paddingTop: DeviceInfo.isIPhoneX_deprecated ? 30 : 0,
-      height: (Platform.OS === 'ios') ? (DeviceInfo.isIPhoneX_deprecated ? GlobalStyles.nav_bar_height_ios : 70) : GlobalStyles.nav_bar_height_android,
+      // paddingTop: DeviceInfo.isIPhoneX_deprecated ? 30 : 0,
+      // height: (Platform.OS === 'ios') ? (DeviceInfo.isIPhoneX_deprecated ? 100 : 70) : GlobalStyles.nav_bar_height_android,
+      height: (Platform.OS === 'ios') ? GlobalStyles.nav_bar_height_ios : GlobalStyles.nav_bar_height_android,
     }}>
       {backButton}
       {inputView}
@@ -244,7 +246,7 @@ class SearchPage extends Component {
       </TouchableOpacity> : null
 
     return (
-      <View style={GlobalStyles.root_container}>
+      <SafeAreaViewPlus topColor={theme.themeColor} style={GlobalStyles.root_container}>
         {statusBar}
         {this.renderNavBar()}
         {resultView}
@@ -253,7 +255,7 @@ class SearchPage extends Component {
           ref={toast => this.toast = toast}
           position={'center'}
         />
-      </View>
+      </SafeAreaViewPlus>
     )
   }
 }
