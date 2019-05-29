@@ -14,3 +14,13 @@ react-native run-ios --simulator "iPhone 6s Plus"
 
 react-native run-ios
 
+
+
+// 打包（开发环境还是需要先打包）
+// 根目录下创建bundle/ios, bundle/android
+react-native bundle --entry-file index.js --bundle-output ./bundle/ios/main.jsbundle --platform ios --assets-dest ./bundle/ios --dev false
+
+// 打包与发布（二合一） code-push
+<!--code-push release-react <Appname> <Platform> &#45;&#45;t <本更新包面向的旧版本号> &#45;&#45;des <本次更新说明>-->
+code-push release-react iOSRNHybrid ios --t 1.0.0 --dev false  --des "这是第一个开发环境更新包"
+

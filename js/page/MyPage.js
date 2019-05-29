@@ -105,6 +105,9 @@ class MyPage extends Component {
             console.error('an error occor');
           })
         break
+      case MORE_MENU.CodePush:
+        RouteName = 'CodePushPage'
+        break
       default:
         break
     }
@@ -199,6 +202,9 @@ class MyPage extends Component {
           <View style={GlobalStyles.line}/>
           {/*反馈*/}
           {this.getItem(MORE_MENU.Feedback)}
+          {/*code-push*/}
+          <View style={GlobalStyles.line}/>
+          {this.getItem(MORE_MENU.CodePush)}
         </ScrollView>
       </View>
     )
