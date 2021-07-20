@@ -12,7 +12,7 @@
     "GitHubTrending": "^3.0.1",
     "prop-types": "^15.7.2",
     "react": "16.8.3",
-    "react-native": "0.59.2",
+    "react-native": "0.62.3",
     "react-native-check-box": "^2.1.7",
     "react-native-code-push": "^5.6.0",
     "react-native-easy-toast": "^1.2.0",
